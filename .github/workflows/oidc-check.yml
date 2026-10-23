@@ -9,44 +9,17 @@ permissions:
 
 jobs:
   inspect:
-    name: Inspect OIDC Claims
+    name: Verify AWS OIDC Identity
     runs-on: ubuntu-latest
     environment: atlas-dev
 
     steps:
-      - name: Inspect GitHub OIDC claims
-        env:
-          OIDC_URL: ${{ vars.ACTIONS_ID_TOKEN_REQUEST_URL }}
-          OIDC_TOKEN: ${{ secrets.ACTIONS_ID_TOKEN_REQUEST_TOKEN }}
-        run: |
-          python - <<'PY'
-          import os
-          import json
-          import base64
-          import urllib.parse
-          import urllib.request
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-session-name: ProjectAtlasOidcCheck
 
-          url = os.environ["OIDC_URL"]
-          token = os.environ["OIDC_TOKEN"]
-
-          query = urllib.parse.urlencode({
-              "audience": "sts.amazonaws.com"
-          })
-
-          separator = "&" if "?" in url else "?"
-          request = urllib.request.Request(
-              f"{url}{separator}{query}",
-              headers={"Authorization": f"Bearer {token}"},
-          )
-
-          with urllib.request.urlopen(request) as response:
-              jwt = json.load(response)["value"]
-
-          payload = jwt.split(".")[1]
-          payload += "=" * (-len(payload) % 4)
-          claims = json.loads(
-              base64.urlsafe_b64decode(payload)
-          )
-
-          print(json.dumps(claims, indent=2))
-          PY
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity

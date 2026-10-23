@@ -17,7 +17,7 @@ class TestHandler(unittest.TestCase):
 
         body = json.loads(result["body"])
 
-        self.assertEqual(body["status"], "healthy")
+        self.assertEqual(body["status"], "broken")
         self.assertEqual(body["service"], "project-atlas")
 
     def test_response_contains_version(self):

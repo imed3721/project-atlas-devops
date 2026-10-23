@@ -125,11 +125,11 @@ Amazon CloudWatch collects Lambda logs and provides an alarm to monitor function
 
 ### CloudWatch alarm
 
-![Image Alt]()
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/81339602fac5affbb545545a9b137c132e21ee31/screenshots/Screenshot%202026-10-23%20at%2008.59.29.png)
 
-![Image Alt]()
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/81339602fac5affbb545545a9b137c132e21ee31/screenshots/Screenshot%202026-10-23%20at%2008.59.10.png)
 
-![Image Alt]()
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/81339602fac5affbb545545a9b137c132e21ee31/screenshots/Screenshot%202026-10-23%20at%2008.58.17.png)
 
 ## Infrastructure Drift Detection
 

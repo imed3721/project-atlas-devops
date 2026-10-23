@@ -9,11 +9,29 @@ permissions:
 
 jobs:
   unauthorized-test:
+    name: Verify unauthorized role assumption is denied
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+
     steps:
       - name: Attempt unauthorized role assumption
+        id: assume_role
+        continue-on-error: true
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::499689292130:role/ProjectAtlasDeployRole
           aws-region: eu-west-2
           role-session-name: OIDCNegativeSecurityTest
+
+      - name: Evaluate security test result
+        if: always()
+        env:
+          ASSUME_ROLE_OUTCOME: ${{ steps.assume_role.outcome }}
+        shell: bash
+        run: |
+          if [ "$ASSUME_ROLE_OUTCOME" = "failure" ]; then
+            echo "PASS: AWS denied the unauthorized role assumption."
+          else
+            echo "::error::FAIL: The role assumption succeeded unexpectedly."
+            exit 1
+          fi

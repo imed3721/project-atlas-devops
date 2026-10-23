@@ -23,7 +23,13 @@ Relevant files:
 
 ### Application source code
 
-![Application source code](docs/screenshots/screenshot-03-source-code.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/c915fe138e4fcbc31d172751fb85b72423a4196f/screenshots/Screenshot%202026-10-23%20at%2007.20.21.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/c915fe138e4fcbc31d172751fb85b72423a4196f/screenshots/Screenshot%202026-10-23%20at%2007.20.31.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/c915fe138e4fcbc31d172751fb85b72423a4196f/screenshots/Screenshot%202026-10-23%20at%2007.20.40.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/c915fe138e4fcbc31d172751fb85b72423a4196f/screenshots/Screenshot%202026-10-23%20at%2007.20.47.png)
 
 ## Continuous Integration
 
@@ -31,7 +37,11 @@ GitHub Actions automatically runs Python unit tests and validates the Terraform 
 
 ### CI workflow
 
-![CI workflow](docs/screenshots/screenshot-04-ci-pipeline.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/0bee79e836076e4f459e58f1d795b578e8d2cbe3/screenshots/Screenshot%202026-10-23%20at%2007.21.38.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/0bee79e836076e4f459e58f1d795b578e8d2cbe3/screenshots/Screenshot%202026-10-23%20at%2007.21.49.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/0bee79e836076e4f459e58f1d795b578e8d2cbe3/screenshots/Screenshot%202026-10-23%20at%2007.21.56.png)
 
 ## Secure GitHub-to-AWS Authentication
 

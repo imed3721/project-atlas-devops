@@ -1,0 +1,38 @@
+name: OIDC Environment Boundary Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  unauthorized-test:
+    name: Test role assumption without trusted environment
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    # Intentionally do not specify "environment: atlas-dev".
+    steps:
+      - name: Attempt deployment role assumption
+        id: assume_role
+        continue-on-error: true
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::499689292130:role/ProjectAtlasDeployRole
+          aws-region: eu-west-2
+          role-session-name: OIDCEnvironmentBoundaryTest
+
+      - name: Evaluate security test
+        if: always()
+        env:
+          ASSUME_ROLE_OUTCOME: ${{ steps.assume_role.outcome }}
+        shell: bash
+        run: |
+          if [ "$ASSUME_ROLE_OUTCOME" = "failure" ]; then
+            echo "PASS: AWS rejected the role assumption without the trusted environment."
+          else
+            echo "::error::FAIL: The role was assumed without the trusted environment."
+            exit 1
+          fi

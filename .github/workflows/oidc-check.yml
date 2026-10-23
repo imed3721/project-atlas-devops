@@ -1,0 +1,17 @@
+name: Inspect GitHub OIDC Identity
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  inspect:
+    name: Inspect OIDC Claims
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Inspect GitHub OIDC claims
+        uses: github/actions-oidc-debugger@v1

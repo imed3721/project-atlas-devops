@@ -51,11 +51,10 @@ The IAM trust policy restricts which GitHub repository and environment can assum
 
 ### OIDC configuration
 
-![OIDC configuration](docs/screenshots/screenshot-06-oidc.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/dca7719da5fcbea165ca6c7fe29861f7e4705042/screenshots/Screenshot%202026-10-23%20at%2007.41.13.png)
 
-### GitHub environment
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/dca7719da5fcbea165ca6c7fe29861f7e4705042/screenshots/Screenshot%202026-10-23%20at%2007.41.22.png)
 
-![GitHub environment](docs/screenshots/screenshot-07-github-environment.png)
 
 ## Terraform Infrastructure and Remote State
 
@@ -63,7 +62,9 @@ Terraform defines the AWS infrastructure. The remote state file is stored in an 
 
 ### Terraform state bucket
 
-![Terraform state bucket](docs/screenshots/screenshot-08-state-bucket.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/dca7719da5fcbea165ca6c7fe29861f7e4705042/screenshots/Screenshot%202026-10-23%20at%2007.49.28.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/dca7719da5fcbea165ca6c7fe29861f7e4705042/screenshots/Screenshot%202026-10-23%20at%2007.49.39.png)
 
 ### Terraform configuration
 

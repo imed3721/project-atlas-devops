@@ -1,0 +1,76 @@
+name: Project Atlas - Destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_destroy:
+        description: "Type DESTROY to confirm deletion of Project Atlas infrastructure"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: project-atlas-destroy-atlas-dev
+  cancel-in-progress: false
+
+jobs:
+  destroy:
+    name: Destroy disposable infrastructure
+    runs-on: ubuntu-latest
+    environment: atlas-dev
+    timeout-minutes: 30
+
+    steps:
+      - name: Validate destruction confirmation
+        env:
+          CONFIRM_DESTROY: ${{ inputs.confirm_destroy }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ "$CONFIRM_DESTROY" != "DESTROY" ]; then
+            echo "::error::Destruction cancelled. You must enter DESTROY exactly."
+            exit 1
+          fi
+
+          echo "Destruction confirmation accepted."
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS through OIDC
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-session-name: ProjectAtlasDestroy
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
+
+      - name: Initialize Terraform
+        run: terraform -chdir=infrastructure init -input=false
+
+      - name: Validate Terraform configuration
+        run: terraform -chdir=infrastructure validate
+
+      - name: Create destruction plan
+        run: |
+          terraform -chdir=infrastructure plan \
+            -destroy \
+            -input=false \
+            -lock-timeout=5m \
+            -no-color \
+            -out=destroy.tfplan
+
+      - name: Review destruction plan
+        run: terraform -chdir=infrastructure show -no-color destroy.tfplan
+
+      - name: Destroy the disposable environment
+        run: terraform -chdir=infrastructure apply -input=false -auto-approve destroy.tfplan

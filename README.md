@@ -159,11 +159,21 @@ A unit test is deliberately changed to produce a failure. The CI workflow detect
 
 ### CI failure
 
-![CI failure](docs/screenshots/screenshot-19-ci-failure.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/9b55172bc84fb43d9986702431d073d446fa11d4/screenshots/Screenshot%202026-10-23%20at%2010.20.16.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/9b55172bc84fb43d9986702431d073d446fa11d4/screenshots/Screenshot%202026-10-23%20at%2010.21.14.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/9b55172bc84fb43d9986702431d073d446fa11d4/screenshots/Screenshot%202026-10-23%20at%2010.20.28.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/9b55172bc84fb43d9986702431d073d446fa11d4/screenshots/Screenshot%202026-10-23%20at%2010.22.19.png)
 
 ### CI recovery
 
-![CI recovery](docs/screenshots/screenshot-20-ci-recovered.png)
+![Image Alt]()
+
+![Image Alt]()
+
+![Image Alt]()
 
 ## Security and Future Improvements
 

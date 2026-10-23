@@ -37,13 +37,26 @@ jobs:
       - name: Verify AWS identity
         run: aws sts get-caller-identity
 
+      - name: Check deployed Lambda version
+        id: lambda_version
+        shell: bash
+        run: |
+          VERSION=$(aws lambda get-function-configuration \
+            --function-name project-atlas \
+            --region "${{ vars.AWS_REGION }}" \
+            --query 'Environment.Variables.APP_VERSION' \
+            --output text)
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Deployed APP_VERSION: $VERSION"
+
       - name: Initialize Terraform
         run: terraform -chdir=infrastructure init -input=false
 
       - name: Validate Terraform configuration
         run: terraform -chdir=infrastructure validate
 
-      - name: Create a read-only plan
+      - name: Create read-only Terraform plan
         id: plan
         shell: bash
         run: |
@@ -77,9 +90,21 @@ jobs:
         if: success()
         env:
           PLAN_RESULT: ${{ steps.plan.outputs.result }}
+          LAMBDA_VERSION: ${{ steps.lambda_version.outputs.version }}
         run: |
+          {
+            echo "## Project Atlas drift report"
+            echo ""
+            echo "- **AWS region:** ${{ vars.AWS_REGION }}"
+            echo "- **Lambda function:** project-atlas"
+            echo "- **Deployed APP_VERSION:** $LAMBDA_VERSION"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
           if [ "$PLAN_RESULT" = "clean" ]; then
-            echo "Drift check completed successfully: no proposed changes."
+            echo "- **Result:** No proposed changes" >> "$GITHUB_STEP_SUMMARY"
+            echo "Drift check completed: no proposed changes."
           elif [ "$PLAN_RESULT" = "changes" ]; then
+            echo "- **Result:** Changes detected; review the Terraform plan" >> "$GITHUB_STEP_SUMMARY"
             echo "Drift check completed: proposed changes require review."
           fi

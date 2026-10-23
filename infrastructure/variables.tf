@@ -13,5 +13,5 @@ variable "project_name" {
 variable "app_version" {
   description = "Application version exposed by the Lambda health endpoint"
   type        = string
-  default     = "1.0.0"
+  default     = "dev"
 }

@@ -1,0 +1,19 @@
+name: OIDC Negative Security Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  unauthorized-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Attempt unauthorized role assumption
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::499689292130:role/ProjectAtlasDeployRole
+          aws-region: eu-west-2
+          role-session-name: OIDCNegativeSecurityTest

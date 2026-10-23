@@ -113,7 +113,7 @@ The demonstration endpoint is publicly accessible and is not intended for sensit
 
 ### Health-check response
 
-![Health-check response](docs/screenshots/screenshot-13-health-check.png)
+![Health-check response](https://github.com/imed3721/project-atlas-devops/blob/bcd03361520df044f37848c880105b5118624409/screenshots/Screenshot%2011.png)
 
 ## Monitoring and Observability
 
@@ -121,11 +121,15 @@ Amazon CloudWatch collects Lambda logs and provides an alarm to monitor function
 
 ### CloudWatch logs
 
-![CloudWatch logs](docs/screenshots/screenshot-14-cloudwatch-logs.png)
+![CloudWatch logs](https://github.com/imed3721/project-atlas-devops/blob/bcd03361520df044f37848c880105b5118624409/screenshots/screenshot%2012.png)
 
 ### CloudWatch alarm
 
-![CloudWatch alarm](docs/screenshots/screenshot-15-cloudwatch-alarm.png)
+![Image Alt]()
+
+![Image Alt]()
+
+![Image Alt]()
 
 ## Infrastructure Drift Detection
 

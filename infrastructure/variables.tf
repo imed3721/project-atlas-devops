@@ -5,13 +5,13 @@ variable "aws_region" {
 }
 
 variable "project_name" {
-  description = "Prefix used to name Project Atlas resources"
+  description = "Name used for Project Atlas AWS resources"
   type        = string
   default     = "project-atlas"
 }
 
 variable "app_version" {
-  description = "Version of the application deployed by CI/CD"
+  description = "Application version exposed by the Lambda health endpoint"
   type        = string
   default     = "1.0.0"
 }

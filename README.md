@@ -68,7 +68,16 @@ Terraform defines the AWS infrastructure. The remote state file is stored in an 
 
 ### Terraform configuration
 
-![Terraform configuration](docs/screenshots/screenshot-09-terraform-configuration.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/310e37166b530b5085530117b966c58bf7ab4e89/screenshots/Screenshot%202026-10-23%20at%2007.54.43.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/310e37166b530b5085530117b966c58bf7ab4e89/screenshots/Screenshot%202026-10-23%20at%2007.54.49.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/310e37166b530b5085530117b966c58bf7ab4e89/screenshots/Screenshot%202026-10-23%20at%2007.54.54.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/310e37166b530b5085530117b966c58bf7ab4e89/screenshots/Screenshot%202026-10-23%20at%2007.55.03.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/310e37166b530b5085530117b966c58bf7ab4e89/screenshots/Screenshot%202026-10-23%20at%2007.55.37.png)
+
 
 ## Automated Deployment
 
@@ -76,15 +85,25 @@ The deployment workflow authenticates to AWS using OIDC, validates the Terraform
 
 ### Deployment workflow
 
-![Deployment workflow](docs/screenshots/screenshot-10-deployment-workflow.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/40c2bf9903d3ccfa8396ef084a3a2f33c706c1f5/screenshots/screenshot%208.png)
 
 ### AWS identity verification
 
-![AWS identity verification](docs/screenshots/screenshot-11-aws-identity.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/40c2bf9903d3ccfa8396ef084a3a2f33c706c1f5/screenshots/screenshot%209.png)
 
 ### Terraform outputs
 
-![Terraform outputs](docs/screenshots/screenshot-12-terraform-outputs.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/e6d5f2441a893900a085ee8aa0cb4bd5b22d080e/screenshots/Screenshot%202026-10-23%20at%2008.11.49.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/e6d5f2441a893900a085ee8aa0cb4bd5b22d080e/screenshots/Screenshot%202026-10-23%20at%2008.11.59.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/e6d5f2441a893900a085ee8aa0cb4bd5b22d080e/screenshots/Screenshot%202026-10-23%20at%2008.12.07.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/e6d5f2441a893900a085ee8aa0cb4bd5b22d080e/screenshots/Screenshot%202026-10-23%20at%2008.12.15.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/e6d5f2441a893900a085ee8aa0cb4bd5b22d080e/screenshots/Screenshot%202026-10-23%20at%2008.12.24.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/e6d5f2441a893900a085ee8aa0cb4bd5b22d080e/screenshots/Screenshot%202026-10-23%20at%2008.12.30.png)
 
 ## Application Health Check
 

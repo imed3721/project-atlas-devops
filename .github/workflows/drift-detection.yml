@@ -1,0 +1,85 @@
+name: Project Atlas - Drift Detection
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 7 * * 1-5"
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: project-atlas-drift-atlas-dev
+  cancel-in-progress: false
+
+jobs:
+  drift:
+    name: Inspect infrastructure
+    runs-on: ubuntu-latest
+    environment: atlas-dev
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure read-only AWS access
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_DRIFT_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-session-name: ProjectAtlasDriftCheck
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
+
+      - name: Initialize Terraform
+        run: terraform -chdir=infrastructure init -input=false
+
+      - name: Validate Terraform configuration
+        run: terraform -chdir=infrastructure validate
+
+      - name: Create a read-only plan
+        id: plan
+        shell: bash
+        run: |
+          set +e
+          terraform -chdir=infrastructure plan \
+            -input=false \
+            -lock-timeout=5m \
+            -detailed-exitcode \
+            -no-color \
+            > plan.txt 2>&1
+          result=$?
+          set -e
+
+          cat plan.txt >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$result" -eq 0 ]; then
+            echo "result=clean" >> "$GITHUB_OUTPUT"
+            echo "## Drift detection: No changes" >> "$GITHUB_STEP_SUMMARY"
+            echo "No proposed infrastructure changes were detected."
+          elif [ "$result" -eq 2 ]; then
+            echo "result=changes" >> "$GITHUB_OUTPUT"
+            echo "## Drift detection: Changes detected" >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::Terraform proposed changes. Review the plan to distinguish infrastructure drift from configuration changes."
+          else
+            echo "## Drift detection: Failed" >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::Terraform plan failed. Check the logs and AWS permissions."
+            exit "$result"
+          fi
+
+      - name: Report drift check outcome
+        if: success()
+        env:
+          PLAN_RESULT: ${{ steps.plan.outputs.result }}
+        run: |
+          if [ "$PLAN_RESULT" = "clean" ]; then
+            echo "Drift check completed successfully: no proposed changes."
+          elif [ "$PLAN_RESULT" = "changes" ]; then
+            echo "Drift check completed: proposed changes require review."
+          fi

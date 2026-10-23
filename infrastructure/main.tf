@@ -4,6 +4,7 @@ data "archive_file" "application" {
   output_path = "${path.module}/handler.zip"
 }
 
+# Lambda execution role
 resource "aws_iam_role" "lambda_execution" {
   name = "${var.project_name}-lambda-execution"
 
@@ -27,11 +28,13 @@ resource "aws_iam_role" "lambda_execution" {
   }
 }
 
+# Allow Lambda to write logs to CloudWatch
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
   role       = aws_iam_role.lambda_execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+# CloudWatch log group
 resource "aws_cloudwatch_log_group" "application" {
   name              = "/aws/lambda/${var.project_name}"
   retention_in_days = 7
@@ -43,6 +46,7 @@ resource "aws_cloudwatch_log_group" "application" {
   }
 }
 
+# Project Atlas Lambda function
 resource "aws_lambda_function" "application" {
   function_name = var.project_name
   role          = aws_iam_role.lambda_execution.arn
@@ -73,11 +77,13 @@ resource "aws_lambda_function" "application" {
   }
 }
 
+# Public Lambda Function URL
 resource "aws_lambda_function_url" "application" {
   function_name      = aws_lambda_function.application.function_name
   authorization_type = "NONE"
 }
 
+# Permit public requests through the Function URL
 resource "aws_lambda_permission" "public_url" {
   statement_id           = "AllowPublicFunctionUrl"
   action                 = "lambda:InvokeFunctionUrl"

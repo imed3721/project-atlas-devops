@@ -40,10 +40,14 @@ jobs:
       - name: Check deployed Lambda version
         id: lambda_version
         shell: bash
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
         run: |
+          set -euo pipefail
+
           VERSION=$(aws lambda get-function-configuration \
             --function-name project-atlas \
-            --region "${{ vars.AWS_REGION }}" \
+            --region "$AWS_REGION" \
             --query 'Environment.Variables.APP_VERSION' \
             --output text)
 
@@ -56,46 +60,80 @@ jobs:
       - name: Validate Terraform configuration
         run: terraform -chdir=infrastructure validate
 
+      - name: Diagnose Terraform configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "## Terraform diagnostics" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "Terraform configuration files:"
+          find infrastructure -maxdepth 1 -type f -name '*.tf' -print | sort
+
+          echo ""
+          echo "Checking application version and lifecycle settings:"
+          grep -R -n -E 'app_version|ignore_changes|environment[[:space:]]*\{' \
+            infrastructure --include='*.tf' || true
+
+          echo ""
+          echo "Terraform state resource addresses:"
+          terraform -chdir=infrastructure state list
+
+          echo ""
+          echo "Terraform provider requirements:"
+          terraform -chdir=infrastructure providers
+
       - name: Create read-only Terraform plan
         id: plan
         shell: bash
         run: |
+          set -uo pipefail
+
+          PLAN_FILE="$RUNNER_TEMP/project-atlas-plan.txt"
+
           set +e
           terraform -chdir=infrastructure plan \
             -input=false \
             -lock-timeout=5m \
             -detailed-exitcode \
             -no-color \
-            > plan.txt 2>&1
+            > "$PLAN_FILE" 2>&1
           result=$?
           set -e
 
-          cat plan.txt >> "$GITHUB_STEP_SUMMARY"
+          cat "$PLAN_FILE"
+          cat "$PLAN_FILE" >> "$GITHUB_STEP_SUMMARY"
 
-          if [ "$result" -eq 0 ]; then
-            echo "result=clean" >> "$GITHUB_OUTPUT"
-            echo "## Drift detection: No changes" >> "$GITHUB_STEP_SUMMARY"
-            echo "No proposed infrastructure changes were detected."
-          elif [ "$result" -eq 2 ]; then
-            echo "result=changes" >> "$GITHUB_OUTPUT"
-            echo "## Drift detection: Changes detected" >> "$GITHUB_STEP_SUMMARY"
-            echo "::warning::Terraform proposed changes. Review the plan to distinguish infrastructure drift from configuration changes."
-          else
-            echo "## Drift detection: Failed" >> "$GITHUB_STEP_SUMMARY"
-            echo "::error::Terraform plan failed. Check the logs and AWS permissions."
-            exit "$result"
-          fi
+          case "$result" in
+            0)
+              echo "result=clean" >> "$GITHUB_OUTPUT"
+              echo "## Drift detection: No changes" >> "$GITHUB_STEP_SUMMARY"
+              echo "No proposed infrastructure changes were detected."
+              ;;
+            2)
+              echo "result=changes" >> "$GITHUB_OUTPUT"
+              echo "## Drift detection: Changes detected" >> "$GITHUB_STEP_SUMMARY"
+              echo "::warning::Terraform proposed changes. Review the plan to distinguish infrastructure drift from configuration changes."
+              ;;
+            *)
+              echo "## Drift detection: Failed" >> "$GITHUB_STEP_SUMMARY"
+              echo "::error::Terraform plan failed. Check the logs, state access, and AWS permissions."
+              exit "$result"
+              ;;
+          esac
 
       - name: Report drift check outcome
-        if: success()
+        if: always() && steps.plan.outcome == 'success'
         env:
           PLAN_RESULT: ${{ steps.plan.outputs.result }}
           LAMBDA_VERSION: ${{ steps.lambda_version.outputs.version }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+        shell: bash
         run: |
           {
             echo "## Project Atlas drift report"
             echo ""
-            echo "- **AWS region:** ${{ vars.AWS_REGION }}"
+            echo "- **AWS region:** $AWS_REGION"
             echo "- **Lambda function:** project-atlas"
             echo "- **Deployed APP_VERSION:** $LAMBDA_VERSION"
             echo ""

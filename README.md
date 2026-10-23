@@ -139,15 +139,19 @@ A manual change is introduced in the AWS Console, detected by the drift workflow
 
 ### Drift introduced
 
-![Drift introduced](docs/screenshots/screenshot-16-drift-introduced.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/e53536777abe637fbafcc8f962f5438aa691ba49/screenshots/Screenshot%202026-10-23%20at%2009.56.37.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/e53536777abe637fbafcc8f962f5438aa691ba49/screenshots/Screenshot%202026-10-23%20at%2009.57.03.png)
 
 ### Drift detected
 
-![Drift detected](docs/screenshots/screenshot-17-drift-detected.png)
+![Drift detected](https://github.com/imed3721/project-atlas-devops/blob/e53536777abe637fbafcc8f962f5438aa691ba49/screenshots/screenshot%2015.png)
 
 ### Drift resolved
 
-![Drift resolved](docs/screenshots/screenshot-18-drift-resolved.png)
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/e53536777abe637fbafcc8f962f5438aa691ba49/screenshots/Screenshot%202026-10-23%20at%2010.13.39.png)
+
+![Image Alt](https://github.com/imed3721/project-atlas-devops/blob/e53536777abe637fbafcc8f962f5438aa691ba49/screenshots/Screenshot%202026-10-23%20at%2010.15.36.png)
 
 ## Failure Testing and Recovery
 
